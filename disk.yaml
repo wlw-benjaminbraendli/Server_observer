@@ -1,0 +1,4 @@
+disk:
+  - mmcblk0
+  - ram0
+  - ram1

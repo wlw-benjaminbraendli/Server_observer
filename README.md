@@ -7,3 +7,6 @@ The system has three different parts.
 3. A python script which works on the servers, which should be observed. This can, but don't have to be, the same server as the webserver.
 
 On the webserver is a possibility to change the observed server whithout to reload the site.
+
+The website uses smoothie Charts. The javascript-file is included in this project, to reduce the amount of downloads.
+
