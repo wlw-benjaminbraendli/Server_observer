@@ -54,7 +54,9 @@ function socket_in(event) {
       Element.id = "DISK" + i;
       document.getElementById("graphs").appendChild(Element);
     }
-    lenDisk=parseInt(spliter[1]);
+    if (lenDisk < parseInt(spliter[1])) {
+      lenDisk=parseInt(spliter[1]);
+    }
     disks.forEach(makeDisk);	//add a graph for every disk
   }
   else {	// if there is no startcommand, readout the data of the stream and add them to the graphs
