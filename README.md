@@ -8,5 +8,5 @@ The system has three different parts.
 
 On the webserver is a possibility to change the observed server whithout to reload the site.
 
-The website uses smoothie Charts. The javascript-file is included in this project, to reduce the amount of downloads.
+The website uses [smoothie Charts](https://www.smoothiecharts.org). The javascript-file is included in this project, to reduce the amount of downloads.
 
