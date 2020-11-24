@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Taskmanager</title>
+        <script type="text/javascript" src="js/smoothie.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/Observer.css">
+    </head>
+    <body>
+        <form id="server_dropdown">
+            <select id="select_server" onchange="changeServer()">
+            </select>
+        </form>
+        <div id="graphs">
+            <h1>CPU usage </h1>
+            <canvas id="CPU"></canvas>
+            </br>
+            <h1>Network send in kb/s</h1>
+            <canvas id="MEM1"></canvas>
+            </br>
+            <h1>Network recieved in kb/s</h1>
+            <canvas id="MEM2"></canvas>
+        </div>
+        <script>
+            var cpuChart = new SmoothieChart({responsive: true, minValue: 0.0, maxValue: 100.0});
+            cpuChart.streamTo(document.getElementById("CPU"), 1000);
+
+            var memChart1 = new SmoothieChart({responsive: true});
+            memChart1.streamTo(document.getElementById("MEM1"), 1000);
+
+            var memChart2 = new SmoothieChart({responsive: true});
+            memChart2.streamTo(document.getElementById("MEM2"), 1000);
+
+        </script>
+        <script src="js/task.js"></script>
+        <script src="js/server.js"></script>
+    </body>
+</html>
+

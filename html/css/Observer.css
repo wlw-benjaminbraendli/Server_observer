@@ -1,0 +1,17 @@
+body {
+  color: green;
+  background-color: black;
+}
+
+select {
+  color: green;
+  background-color: black;
+}
+
+
+canvas {
+  width: 100%;
+  height: 200px;
+}
+
+
