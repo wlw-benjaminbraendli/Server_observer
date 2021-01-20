@@ -19,20 +19,20 @@ The website has different charts.
 The number of disks can be changed local on every server in a configuration file.
 
 ## observer.py 
-This script is the part, which observs the server and give the data to the website.
-The script implements a websocket server and send every second a datapackage to the website. The server can handle multiple connections simultan, but the data are read for every connection seperat.
-At the start, the file disk.yaml is read. This file has a list of all disk, which should be observed. If the list is changed, the script needs to be restartet, to adapt the changes.
-This script has been testet on Windows 10 and Linux, but there is no garante, that it will work on your system. The drive names in the disk.yaml file have to be changed referring to your OS and system configuration.
+This script is the part, which observes the server and give the data to the website.
+The script implements a websocket server and send every second a datapackage to the website. The server can handle multiple connections simultaneously, but the data are read for every connection separated.
+At the start, the file disk.yaml is read. This file has a list of all disk, which should be observed. If the list is changed, the script needs to be restarted, to adapt to the changes.
+This script has been testet on Windows 10 and Linux, but there is no guarantee, that it will work on your system. The drive names in the disk.yaml file have to be changed referring to your OS and system configuration.
 
 ## config.py
-This script has to be run on the same machine as the webserver. In the moment, this has also an websocket server. This server only send a list of ip addresses and ports to the website. This list is read from the config.yaml file. After this list is send, the server does nothing. It is planed, to use this server for later task.
+This script has to be run on the same machine as the webserver. In the moment, this has also a websocket server. This server only send a list of ip addresses and ports to the website. This list is read from the config.yaml file. After this list is send, the server does nothing. It is planed, to use this server for later task.
 This script has been testet on a linux machine. But there should be no issue with an other OS.
 
 ## yaml files
 Both yaml-files should be placed in the same place as the corresponding python script.
 
-## html directorie
-This directorie has evers file for the website, to display the values send from the observer script.
+## html directory
+This directory has evers file for the website, to display the values send from the observer script.
 The server was tested on a instance of lighttpd on a linux system. But it should be portable to other webserver and OS.
 
 ### Observer.html
@@ -42,7 +42,7 @@ This is the html file, of the website.
 This file gives the website the look. There are only 3 classes, but this site uses not many more.
 
 ### js/smoothie.js
-This script is from the smoothichart project. It is the original file, so it could be replaced with a differen version from their repository, but it it is only testet with the version in this repository.
+This script is from the smoothichart project. It is the original file, so it could be replaced with a different version from their repository, but it it is only tested with the version in this repository.
 
 ### js/server.js
 This file is used to read the list of the servers and to handle changes of the current observed server.
