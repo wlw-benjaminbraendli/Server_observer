@@ -41,12 +41,12 @@ async def timer(websocket, path):
 	#wait 1 s
         await asyncio.sleep(1)
         #reread the bytecounter and substract the two different values of the network
-        now = str(time.time()) + ' ' + str(psutil.cpu_percent()) + ' ' + str((psutil.net_io_counters().bytes_sent - sent1)/1024) + ' ' + str((psutil.net_io_counters().bytes_recv - recv1)/1024)
+        now = str(time.time()) + ' ' + str(psutil.cpu_percent()) + ' ' + str((psutil.net_io_counters().bytes_sent - sent1)/128) + ' ' + str((psutil.net_io_counters().bytes_recv - recv1)/128)
         disk2 = psutil.disk_io_counters(perdisk=True)
         #calculate the two different values for each disk
         for x in keys:
-            now = now + ' ' + str((disk2[x].read_bytes - disk1[x].read_bytes)/1024)
-            now = now + ' ' + str((disk2[x].write_bytes - disk2[x].write_bytes)/1024)
+            now = now + ' ' + str((disk2[x].read_bytes - disk1[x].read_bytes)/128)
+            now = now + ' ' + str((disk2[x].write_bytes - disk2[x].write_bytes)/128)
         #send the values to the webserver
         await websocket.send(now)
 
