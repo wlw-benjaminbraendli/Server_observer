@@ -16,6 +16,8 @@ The website has different charts.
 - Network recieved
 - Disk write and read
 
+To read the YAML-strings on the client side I use a script from nodeca from the [link](https://raw.githubusercontent.com/nodeca/js-yaml/master/dist/js-yaml.js).
+
 The number of disks can be changed local on every server in a configuration file.
 
 ## observer.py 
