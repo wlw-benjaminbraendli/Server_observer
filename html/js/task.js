@@ -84,7 +84,7 @@ memChart2.addTimeSeries(net2, { strokeStyle:'rgb(0, 255, 0)'});
 // function to init the graphs for the different Disks
 
 function makeDisk(item, index) {
-  console.log(item);
+//  console.log(item);
   diskGraph[index] = (new SmoothieChart({responsive: true}));
   diskGraph[index].streamTo(document.getElementById(item), 1000);
   diskTime.push(new TimeSeries());
