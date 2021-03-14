@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>Taskmanager</title>
         <script type="text/javascript" src="js/smoothie.js"></script>
+        <script type="text/javascript" src="js/yaml.js"></script>
         <link rel="stylesheet" type="text/css" href="css/Observer.css">
     </head>
     <body>
@@ -16,20 +17,20 @@
             <canvas id="CPU"></canvas>
             </br>
             <h1>Network send in kb/s</h1>
-            <canvas id="MEM1"></canvas>
+            <canvas id="NET1"></canvas>
             </br>
             <h1>Network recieved in kb/s</h1>
-            <canvas id="MEM2"></canvas>
+            <canvas id="NET2"></canvas>
         </div>
         <script>
             var cpuChart = new SmoothieChart({responsive: true, minValue: 0.0, maxValue: 100.0});
             cpuChart.streamTo(document.getElementById("CPU"), 1000);
 
             var memChart1 = new SmoothieChart({responsive: true});
-            memChart1.streamTo(document.getElementById("MEM1"), 1000);
+            memChart1.streamTo(document.getElementById("NET1"), 1000);
 
             var memChart2 = new SmoothieChart({responsive: true});
-            memChart2.streamTo(document.getElementById("MEM2"), 1000);
+            memChart2.streamTo(document.getElementById("NET2"), 1000);
 
         </script>
         <script src="js/task.js"></script>

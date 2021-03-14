@@ -16,16 +16,18 @@ s.close()
 #if automatic read don't function, set the address below
 #ip = "192.168.1.126"
 
-with open("config.yaml") as f:
-    data = yaml.load(f, Loader=yaml.FullLoader)
-
 #asyncron functtion of the ws server.
 async def timer(websocket, path):
     #send startsignal
+    with open("config.yaml") as f:
+        data = f.read()
+
     start = "start"
-    for x in data["servers"]:
-        start = start + " " + x
-    await websocket.send(start)
+#    for x in data["servers"]:
+#        start = start + " " + x
+#    print(yaml.dump(data))
+    print(data)
+    await websocket.send(data)
     while True:
         name = await websocket.recv()
 
