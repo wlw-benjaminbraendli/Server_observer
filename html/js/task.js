@@ -34,30 +34,32 @@ socket.onopen = function(e) {
 function socket_in(event) {
   spliter = jsyaml.load(event.data);
   // add the HTML elements for the graphs like canvas, title and legend
-  for (i = 0; i < spliter.disk.list.length-lenDisk; i++) {
-    disks.push("DISK" + spliter.disk.list[i]);
-    var Element = document.createElement("br");
-    document.getElementById("graphs").appendChild(Element);
-    var Element = document.createElement("h1");
-    Element.textContent = "Usage of Disk " + spliter.disk.list[i] + " in kb/s";
-    document.getElementById("graphs").appendChild(Element);
-    var Element = document.createElement("text");
-    Element.textContent = " read";
-    Element.style = "color:blue";
-    document.getElementById("graphs").appendChild(Element);
-    var Element = document.createElement("text");
-    Element.textContent = " write";
-    Element.style = "color:red";
-    document.getElementById("graphs").appendChild(Element);
-    var Element = document.createElement("canvas");
-    Element.id = "DISK" + spliter.disk.list[i];
-    document.getElementById("graphs").appendChild(Element);
+  if (spliter.start == "yes")
+  {
+    for (i = 0; i < spliter.disk.list.length-lenDisk; i++) {
+      disks.push("DISK" + spliter.disk.list[i]);
+      var Element = document.createElement("br");
+      document.getElementById("graphs").appendChild(Element);
+      var Element = document.createElement("h1");
+      Element.textContent = "Usage of Disk " + spliter.disk.list[i] + " in kb/s";
+      document.getElementById("graphs").appendChild(Element);
+      var Element = document.createElement("text");
+      Element.textContent = " read";
+      Element.style = "color:blue";
+      document.getElementById("graphs").appendChild(Element);
+      var Element = document.createElement("text");
+      Element.textContent = " write";
+      Element.style = "color:red";
+      document.getElementById("graphs").appendChild(Element);
+      var Element = document.createElement("canvas");
+      Element.id = "DISK" + spliter.disk.list[i];
+      document.getElementById("graphs").appendChild(Element);
+    }
+    if (lenDisk < spliter.disk.list.length) {
+      lenDisk=spliter.disk.list.length;
+    }
+    disks.forEach(makeDisk);	//add a graph for every disk
   }
-  if (lenDisk < spliter.disk.list.length) {
-    lenDisk=spliter.disk.list.length;
-  }
-  disks.forEach(makeDisk);	//add a graph for every disk
-
   //update values
   cpu1.append(parseInt(spliter.time*1000), parseFloat(spliter.cpu));
   net1.append(parseInt(spliter.time*1000), parseFloat(spliter.netw.send));
@@ -84,7 +86,7 @@ memChart2.addTimeSeries(net2, { strokeStyle:'rgb(0, 255, 0)'});
 // function to init the graphs for the different Disks
 
 function makeDisk(item, index) {
-//  console.log(item);
+  console.log(item);
   diskGraph[index] = (new SmoothieChart({responsive: true}));
   diskGraph[index].streamTo(document.getElementById(item), 1000);
   diskTime.push(new TimeSeries());
