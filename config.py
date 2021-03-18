@@ -6,12 +6,14 @@ import time
 import psutil
 import socket
 import yaml
-
+import os, sys
 #read the own IP-address to serve on
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect(("8.8.8.8", 80))
 ip = s.getsockname()[0]
 s.close()
+
+os.chdir(os.path.dirname(sys.argv[0]))
 
 #if automatic read don't function, set the address below
 #ip = "192.168.1.126"

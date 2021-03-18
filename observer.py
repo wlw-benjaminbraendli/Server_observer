@@ -19,10 +19,10 @@ s.close()
 
 
 #read the yaml-file, which disk to observe
-with open("disk.yaml") as f:
-    data = yaml.load(f, Loader=yaml.FullLoader)
+#with open("disk.yaml") as f:
+#    data = yaml.load(f, Loader=yaml.FullLoader)
 
-keys = data["disk"]
+#keys = data["disk"]
 
 
 #if automatic read don't function, set the address below
@@ -33,47 +33,52 @@ keys = data["disk"]
 async def timer(websocket, path):
     #send startsignal with number of the disks
 #    await websocket.send("start " + str(len(keys)))
+    start = "yes"
     while True:
         #read the bytecounter for network and disks
 #        curTime=time.time()
-        sent1 = psutil.net_io_counters().bytes_sent
-        recv1 = psutil.net_io_counters().bytes_recv
+        net1 = psutil.net_io_counters(pernic=True)
         disk1 = psutil.disk_io_counters(perdisk=True)
 	#wait 1 s
         await asyncio.sleep(1)
         #reread the bytecounter and substract the two different values of the network
-<<<<<<< HEAD
-        sent = str((psutil.net_io_counters().bytes_sent - sent1)/128)
-        recv = str((psutil.net_io_counters().bytes_recv - recv1)/128)
-=======
-        now = str(time.time()) + ' ' + str(psutil.cpu_percent()) + ' ' + str((psutil.net_io_counters().bytes_sent - sent1)/128) + ' ' + str((psutil.net_io_counters().bytes_recv - recv1)/128)
->>>>>>> 6db590c7a382c0796467005bc959c181c14daabc
+        net2 = psutil.net_io_counters(pernic=True)
         disk2 = psutil.disk_io_counters(perdisk=True)
+
+
         timer = str(time.time())
         cpu = str(psutil.cpu_percent())
+        ram = str(psutil.virtual_memory().percent)
+        temp = psutil.sensors_temperatures()
 
         now = {}
+        now["start"] = start
         now["cpu"] = cpu
         now["time"] = timer
         now["netw"] = {}
-        now["netw"]["send"] = sent
-        now["netw"]["recv"] = recv
         now["disk"] = {}
-        now["disk"]["list"] = []
+        now["temp"] = {}
+        now["ram"] = ram
 
         #calculate the two different values for each disk
-        for x in keys:
-<<<<<<< HEAD
-            now["disk"]["list"].append(x)
+        for x in disk1.keys():
             now["disk"][x] = {}
             now["disk"][x]["read"] = str((disk2[x].read_bytes - disk1[x].read_bytes)/128)
             now["disk"][x]["write"] = str((disk2[x].write_bytes - disk1[x].write_bytes)/128)
-=======
-            now = now + ' ' + str((disk2[x].read_bytes - disk1[x].read_bytes)/128)
-            now = now + ' ' + str((disk2[x].write_bytes - disk2[x].write_bytes)/128)
->>>>>>> 6db590c7a382c0796467005bc959c181c14daabc
+
+        #calculate the two different values for each disk
+        for x in net1.keys():
+            now["netw"][x] = {}
+            now["netw"][x]["recv"] = str((net2[x].bytes_recv - net1[x].bytes_recv)/128)
+            now["netw"][x]["send"] = str((net2[x].bytes_sent - net1[x].bytes_sent)/128)
+
+        #calculate the two different values for each disk
+        for x in temp.keys():
+            now["temp"][x] = str(temp[x].current)
+
         #send the values to the webserver
         await websocket.send(yaml.dump(now))
+        start="no"
 
 #start the server
 start_server = websockets.serve(timer, ip, 8888)

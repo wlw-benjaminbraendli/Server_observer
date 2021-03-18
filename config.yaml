@@ -1,8 +1,5 @@
 servers:
-  list:
-    - pxe
-    - router
   pxe:
-    - 10.0.2.15:8888
-  router:
     - 192.168.1.125:8888
+  router:
+    - 192.168.1.144:8888
