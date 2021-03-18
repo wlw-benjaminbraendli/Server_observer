@@ -12,9 +12,7 @@ socket.onmessage = socket_in;
 
 //variable fot the Timeseries of the graphes
 var cpu1 = new TimeSeries();
-
-var net1 = new TimeSeries();
-var net2 = new TimeSeries();
+var ram1 = new TimeSeries();
 
 //variable for the wb message
 var spliter;
@@ -23,7 +21,16 @@ var spliter;
 var disks = [];
 var diskTime = [];
 var diskGraph = [];
-var lenDisk = 0;
+
+//variables for the netgraphs
+var nets = [];
+var netTime = [];
+var netGraph = [];
+
+//variables for the netgraphs
+var temp = [];
+var tempTime = [];
+var tempGraph = [];
 
 // function called when the wb is opened
 socket.onopen = function(e) {
@@ -36,40 +43,114 @@ function socket_in(event) {
   // add the HTML elements for the graphs like canvas, title and legend
   if (spliter.start == "yes")
   {
-    for (i = 0; i < spliter.disk.list.length-lenDisk; i++) {
-      disks.push("DISK" + spliter.disk.list[i]);
+    var paras = document.getElementsByClassName("disks");
+
+    while(paras[0])
+    {
+      paras[0].parentNode.removeChild(paras[0]);
+    }
+
+    disks = [];
+    diskTime = [];
+    diskGraph = [];
+
+    for (x in spliter.disk) {
+      disks.push("DISK" + x);
       var Element = document.createElement("br");
-      document.getElementById("graphs").appendChild(Element);
-      var Element = document.createElement("h1");
-      Element.textContent = "Usage of Disk " + spliter.disk.list[i] + " in kb/s";
-      document.getElementById("graphs").appendChild(Element);
+      Element.className = "disks";
+      document.getElementById("diskdetails").appendChild(Element);
+      var Parent = document.createElement("details");
+      Parent.className = "disks";
+      var Element = document.createElement("summary");
+      Element.textContent = "Usage of Disk " + x + " in kb/s";
+      Element.className = "disks";
+      Parent.appendChild(Element);
       var Element = document.createElement("text");
       Element.textContent = " read";
       Element.style = "color:blue";
-      document.getElementById("graphs").appendChild(Element);
+      Element.className = "disks";
+      Parent.appendChild(Element);
       var Element = document.createElement("text");
       Element.textContent = " write";
       Element.style = "color:red";
-      document.getElementById("graphs").appendChild(Element);
+      Element.className = "disks"
+      Parent.appendChild(Element);
       var Element = document.createElement("canvas");
-      Element.id = "DISK" + spliter.disk.list[i];
-      document.getElementById("graphs").appendChild(Element);
+      Element.id = "DISK" + x;
+      Element.className = "disks"
+      Parent.appendChild(Element);
+      document.getElementById("diskdetails").appendChild(Parent);
     }
-    if (lenDisk < spliter.disk.list.length) {
-      lenDisk=spliter.disk.list.length;
+   for (x in spliter.netw) {
+      nets.push("NETW" + x);
+      var Element = document.createElement("br");
+      Element.className = "disks";
+      document.getElementById("netdetails").appendChild(Element);
+      var Parent = document.createElement("details");
+      Parent.className = "disks";
+      var Element = document.createElement("summary");
+      Element.textContent = "Usage of NIC " + x + " in kb/s";
+      Element.className = "disks";
+      Parent.appendChild(Element);
+      var Element = document.createElement("text");
+      Element.textContent = " send";
+      Element.style = "color:blue";
+      Element.className = "disks";
+      Parent.appendChild(Element);
+      var Element = document.createElement("text");
+      Element.textContent = " recv";
+      Element.style = "color:red";
+      Element.className = "disks"
+      Parent.appendChild(Element);
+      var Element = document.createElement("canvas");
+      Element.id = "NETW" + x;
+      Element.className = "disks"
+      Parent.appendChild(Element);
+      document.getElementById("netdetails").appendChild(Parent);
+    }
+    for (x in spliter.temp) {
+      nets.push("TEMP" + x);
+      var Element = document.createElement("br");
+      Element.className = "disks";
+      document.getElementById("tempdetails").appendChild(Element);
+      var Parent = document.createElement("details");
+      Parent.className = "disks";
+      var Element = document.createElement("summary");
+      Element.textContent = "Temperatur of " + x;
+      Element.className = "disks";
+      Parent.appendChild(Element);
+      var Element = document.createElement("canvas");
+      Element.id = "TEMP" + x;
+      Element.className = "disks"
+      Parent.appendChild(Element);
+      document.getElementById("netdetails").appendChild(Parent);
     }
     disks.forEach(makeDisk);	//add a graph for every disk
+    nets.forEach(makeNet);	//add a graph for every net
+    temp.forEach(makeTemp);	//add a graph for every temperature
   }
   //update values
   cpu1.append(parseInt(spliter.time*1000), parseFloat(spliter.cpu));
-  net1.append(parseInt(spliter.time*1000), parseFloat(spliter.netw.send));
-  net2.append(parseInt(spliter.time*1000), parseFloat(spliter.netw.recv));
+  ram1.append(parseInt(spliter.time*1000), parseFloat(spliter.ram));
 
   //update disks
-  for (i = 0; i < lenDisk; i++) {
-    foo = spliter.disk.list[i];
-    diskTime[2*i].append(parseInt(spliter.time*1000), parseFloat(spliter.disk[foo].read));
-    diskTime[2*i+1].append(parseInt(spliter.time*1000), parseFloat(spliter.disk[foo].write));
+  for (x in spliter.disk) {
+    i = disks.indexOf("DISK" + x);
+    diskTime[2*i].append(parseInt(spliter.time*1000), parseFloat(spliter.disk[x].read));
+    diskTime[2*i+1].append(parseInt(spliter.time*1000), parseFloat(spliter.disk[x].write));
+  }
+
+  //update net
+  for (x in spliter.netw) {
+    i = nets.indexOf("NETW" + x);
+    netTime[2*i].append(parseInt(spliter.time*1000), parseFloat(spliter.netw[x].send));
+    netTime[2*i+1].append(parseInt(spliter.time*1000), parseFloat(spliter.netw[x].recv));
+  }
+
+  //update temperatur
+  for (x in spliter.temp) {
+    i = nets.indexOf("TEMP" + x);
+    tempTime[i].append(parseInt(spliter.time*1000), parseFloat(spliter.netw[x]));
   }
 
 };
@@ -77,16 +158,12 @@ function socket_in(event) {
 //add the graph for the CPU usage
 
 cpuChart.addTimeSeries(cpu1, { strokeStyle:'rgb(0, 255, 0)'});
-
-// add the graphs for the network
-
-memChart1.addTimeSeries(net1, { strokeStyle:'rgb(0, 255, 0)'});
-memChart2.addTimeSeries(net2, { strokeStyle:'rgb(0, 255, 0)'});
+ramChart.addTimeSeries(ram1, { strokeStyle:'rgb(0, 255, 0)'});
 
 // function to init the graphs for the different Disks
 
 function makeDisk(item, index) {
-  console.log(item);
+//  console.log(item);
   diskGraph[index] = (new SmoothieChart({responsive: true}));
   diskGraph[index].streamTo(document.getElementById(item), 1000);
   diskTime.push(new TimeSeries());
@@ -94,3 +171,25 @@ function makeDisk(item, index) {
   diskGraph[index].addTimeSeries(diskTime[index*2], { strokeStyle:'rgb(0, 0, 255)'});
   diskGraph[index].addTimeSeries(diskTime[index*2+1], { strokeStyle:'rgb(255, 0, 0)'});
 }
+
+// function to init the graphs for the different Nets
+
+function makeNet(item, index) {
+//  console.log(item);
+  netGraph[index] = (new SmoothieChart({responsive: true}));
+  netGraph[index].streamTo(document.getElementById(item), 1000);
+  netTime.push(new TimeSeries());
+  netTime.push(new TimeSeries());
+  netGraph[index].addTimeSeries(netTime[index*2], { strokeStyle:'rgb(0, 0, 255)'});
+  netGraph[index].addTimeSeries(netTime[index*2+1], { strokeStyle:'rgb(255, 0, 0)'});
+}
+
+// function to init the graphs for the different temperatures
+
+function makeTemp(item, index) {
+  tempGraph[index] = (new SmoothieChart({responsive: true}));
+  tempGraph[index].streamTo(document.getElementById(item), 1000);
+  tempTime.push(new TimeSeries());
+  tempGraph[index].addTimeSeries(tempTime[index], { strokeStyle:'rgb(255, 0, 0)'});
+}
+

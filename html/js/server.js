@@ -1,5 +1,5 @@
 //wb connestion to the datastream
-let socket_server = new WebSocket("ws://10.0.2.15:8080/");
+let socket_server = new WebSocket("ws://192.168.1.125:8080/");
 
 //variable for the wb message
 var spliter;
@@ -15,7 +15,10 @@ socket.onopen = function(e) {
 //function called everytime wb recieves data
 socket_server.onmessage = function(event) {
     splitter=jsyaml.load(event.data);
-    splitter.servers.list.forEach(addDropdown)
+    for (x in splitter.servers)
+    {
+      addDropdown(x)
+    }
 };
 
 function changeServer() {
@@ -23,7 +26,7 @@ function changeServer() {
     connect_tm(select.value);
 }
 
-function addDropdown(item, id) {
+function addDropdown(item) {
     var element = document.createElement("option");
     element.textContent = item;
     element.value = splitter.servers[item];
