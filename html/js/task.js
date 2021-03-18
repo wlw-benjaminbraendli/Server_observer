@@ -54,6 +54,14 @@ function socket_in(event) {
     diskTime = [];
     diskGraph = [];
 
+    nets = [];
+    netTime = [];
+    netGraph = [];
+
+    temp = [];
+    tempTime = [];
+    tempGraph = [];
+
     for (x in spliter.disk) {
       disks.push("DISK" + x);
       var Element = document.createElement("br");
@@ -109,7 +117,7 @@ function socket_in(event) {
       document.getElementById("netdetails").appendChild(Parent);
     }
     for (x in spliter.temp) {
-      nets.push("TEMP" + x);
+      temp.push("TEMP" + x);
       var Element = document.createElement("br");
       Element.className = "disks";
       document.getElementById("tempdetails").appendChild(Element);
@@ -123,7 +131,7 @@ function socket_in(event) {
       Element.id = "TEMP" + x;
       Element.className = "disks"
       Parent.appendChild(Element);
-      document.getElementById("netdetails").appendChild(Parent);
+      document.getElementById("tempdetails").appendChild(Parent);
     }
     disks.forEach(makeDisk);	//add a graph for every disk
     nets.forEach(makeNet);	//add a graph for every net
@@ -149,8 +157,8 @@ function socket_in(event) {
 
   //update temperatur
   for (x in spliter.temp) {
-    i = nets.indexOf("TEMP" + x);
-    tempTime[i].append(parseInt(spliter.time*1000), parseFloat(spliter.netw[x]));
+    i = temp.indexOf("TEMP" + x);
+    tempTime[i].append(parseInt(spliter.time*1000), parseFloat(spliter.temp[x]));
   }
 
 };
@@ -187,6 +195,7 @@ function makeNet(item, index) {
 // function to init the graphs for the different temperatures
 
 function makeTemp(item, index) {
+  console.log(item);
   tempGraph[index] = (new SmoothieChart({responsive: true}));
   tempGraph[index].streamTo(document.getElementById(item), 1000);
   tempTime.push(new TimeSeries());

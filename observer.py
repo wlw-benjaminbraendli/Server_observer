@@ -74,7 +74,7 @@ async def timer(websocket, path):
 
         #calculate the two different values for each disk
         for x in temp.keys():
-            now["temp"][x] = str(temp[x].current)
+            now["temp"][x] = str(temp[x][0].current)
 
         #send the values to the webserver
         await websocket.send(yaml.dump(now))
