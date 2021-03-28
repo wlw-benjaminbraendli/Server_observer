@@ -1,9 +1,9 @@
 # Server_observer
-Everything needed to observe a server over the local network
+Everything needed to observe a server over the local network. One site for an type of Taskmanager and one site for a table of the services of the server.
 
 The system has three different parts.
 1. Website. This is to show the stats of the server
-2. A python script which works as a server on the same machine as the webserver
+2. A python script which works as a server on the same machine as the webserver. It works as a relais server for the servers to observe.
 3. A python script which works on the servers, which should be observed. This can, but don't have to be, the same server as the webserver.
 
 On the webserver is a possibility to change the observed server whithout to reload the site.
@@ -21,6 +21,7 @@ To read the YAML-strings on the client side I use a script from nodeca from the 
 
 The data from every disk, NIC and Temperature-Sensor which is found on the Server is transmitted to the website. On the website, you can switch the display of the different graphs.
 
+The servers don't have to be visable from the computer which opens the website, but it has to visible from the webserver.
 
 ## observer.py 
 This script is the part, which observes the server and give the data to the website.
@@ -39,7 +40,10 @@ This directory has evers file for the website, to display the values send from t
 The server was tested on a instance of lighttpd on a linux system. But it should be portable to other webserver and OS.
 
 ### Observer.html
-This is the html file, of the website.
+This is the html file of the website of the Taskmanager.
+
+### Service.html
+This is the html file of the website of the Servicetable.
 
 ### css/observer.css
 This file gives the website the look. There are only 3 classes, but this site uses not many more.
@@ -56,3 +60,5 @@ This file is used to read the list of the servers and to handle changes of the c
 ### js/task.js
 This script read the data from the server and sent them to the charts.
 
+## js/service.js
+This script read the data from the server and handles the table of the services.
