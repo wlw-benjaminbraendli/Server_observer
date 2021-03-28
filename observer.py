@@ -7,9 +7,10 @@ import random
 import psutil
 import socket
 import yaml
+import os
 
-# list of the disks to observe
-keys = ['mmcblk0', 'ram0', 'ram1']
+# list of the states
+states = ["static", "generated", "enabled", "transient", "masked", "disabled"]
 
 #read the own IP-address to serve on
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -31,12 +32,17 @@ s.close()
 
 #asyncron functtion of the ws server.
 async def timer(websocket, path):
-    #send startsignal with number of the disks
-#    await websocket.send("start " + str(len(keys)))
     start = "yes"
-    while True:
+
+    async for message in websocket:
+        if message == "task":
+            foo = 1
+            break
+        elif message == "service":
+            foo = 2
+            break
+    while foo == 1:
         #read the bytecounter for network and disks
-#        curTime=time.time()
         net1 = psutil.net_io_counters(pernic=True)
         disk1 = psutil.disk_io_counters(perdisk=True)
 	#wait 1 s
@@ -79,6 +85,27 @@ async def timer(websocket, path):
         #send the values to the webserver
         await websocket.send(yaml.dump(now))
         start="no"
+
+    while foo == 2:
+
+        os.system("systemctl list-unit-files >> /tmp/test")
+
+        now = {}
+
+        with open("/tmp/test") as file:
+            while True:
+                foo = file.readline()
+                if foo != "":
+                    foo = foo.split()
+                    if (len(foo) == 2):
+                        if (foo[1] in states):
+                            now[foo[0]] = foo[1]
+                else:
+                    break
+
+        #send the values to the webserver
+        await websocket.send(yaml.dump(now))
+        await asyncio.sleep(5)
 
 #start the server
 start_server = websockets.serve(timer, ip, 8888)
