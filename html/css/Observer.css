@@ -23,3 +23,53 @@ canvas {
 }
 
 
+.table {
+  overflow-y: auto;
+  height: 400px;
+}
+
+.table thead th {
+  position: sticky;
+  top: 0;
+  background-color: black;
+}
+
+td {
+  padding: 8px 16px;
+  border: 1px solid;
+  collapse: collapse;
+}
+
+th {
+  padding: 8px 16px;
+  border: 1px solid;
+  collapse: collapse;
+}
+
+td.generated {
+  color: orange;
+}
+
+td.disabled {
+  color: red;
+}
+
+td.static {
+  color: yellow;
+}
+
+td.masked {
+  color: blue;
+}
+
+form.types {
+  position: relative;
+  top: -10px;
+  left: 250px;
+}
+
+input {
+  border: none;
+  position: relative;
+  top: 10px;
+}

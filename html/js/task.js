@@ -1,21 +1,30 @@
 //wb connestion to the datastream
-function connect_tm(server) {
-    socket.close();
-    socket = new WebSocket("ws://" + server + "/");
-    socket.onmessage = socket_in;
+function task_connect_tm(server) {
+    socket_task.close();
+    socket_task = new WebSocket("ws://10.0.2.15:8081/");
+    socket_task.onmessage = socket_in_task;
+    foo = {"server" : server, "usage" : "task"}
+    foo = jsyaml.dump(foo)
+    setTimeout(function(){
+      socket_task.send(foo);
+    },1000);
 }
 
 //first dummy connection
-socket = new WebSocket("ws://192.168.1.126:8888/");
-socket.onmessage = socket_in;
-
+socket_task = new WebSocket("ws://10.0.2.15:8081/");
+socket_task.onmessage = socket_in_task;
+foo = {"server" : "10.0.2.15:8888", "usage" : "task"}
+foo = jsyaml.dump(foo)
+setTimeout(function(){
+  socket_task.send(foo);
+},1000);
 
 //variable fot the Timeseries of the graphes
 var cpu1 = new TimeSeries();
 var ram1 = new TimeSeries();
 
 //variable for the wb message
-var spliter;
+var spliter_task;
 
 //variables for the diskgraphs
 var disks = [];
@@ -33,15 +42,15 @@ var tempTime = [];
 var tempGraph = [];
 
 // function called when the wb is opened
-socket.onopen = function(e) {
+socket_task.onopen = function(e) {
   console.log("open");
 };
 
 //function called everytime wb recieves data
-function socket_in(event) {
-  spliter = jsyaml.load(event.data);
+function socket_in_task(event) {
+  spliter_task = jsyaml.load(event.data);
   // add the HTML elements for the graphs like canvas, title and legend
-  if (spliter.start == "yes")
+  if (spliter_task.start == "yes")
   {
     var paras = document.getElementsByClassName("disks");
 
@@ -62,7 +71,7 @@ function socket_in(event) {
     tempTime = [];
     tempGraph = [];
 
-    for (x in spliter.disk) {
+    for (x in spliter_task.disk) {
       disks.push("DISK" + x);
       var Element = document.createElement("br");
       Element.className = "disks";
@@ -89,7 +98,7 @@ function socket_in(event) {
       Parent.appendChild(Element);
       document.getElementById("diskdetails").appendChild(Parent);
     }
-   for (x in spliter.netw) {
+   for (x in spliter_task.netw) {
       nets.push("NETW" + x);
       var Element = document.createElement("br");
       Element.className = "disks";
@@ -116,7 +125,7 @@ function socket_in(event) {
       Parent.appendChild(Element);
       document.getElementById("netdetails").appendChild(Parent);
     }
-    for (x in spliter.temp) {
+    for (x in spliter_task.temp) {
       temp.push("TEMP" + x);
       var Element = document.createElement("br");
       Element.className = "disks";
@@ -138,27 +147,27 @@ function socket_in(event) {
     temp.forEach(makeTemp);	//add a graph for every temperature
   }
   //update values
-  cpu1.append(parseInt(spliter.time*1000), parseFloat(spliter.cpu));
-  ram1.append(parseInt(spliter.time*1000), parseFloat(spliter.ram));
+  cpu1.append(parseInt(spliter_task.time*1000), parseFloat(spliter_task.cpu));
+  ram1.append(parseInt(spliter_task.time*1000), parseFloat(spliter_task.ram));
 
   //update disks
-  for (x in spliter.disk) {
+  for (x in spliter_task.disk) {
     i = disks.indexOf("DISK" + x);
-    diskTime[2*i].append(parseInt(spliter.time*1000), parseFloat(spliter.disk[x].read));
-    diskTime[2*i+1].append(parseInt(spliter.time*1000), parseFloat(spliter.disk[x].write));
+    diskTime[2*i].append(parseInt(spliter_task.time*1000), parseFloat(spliter_task.disk[x].read));
+    diskTime[2*i+1].append(parseInt(spliter_task.time*1000), parseFloat(spliter_task.disk[x].write));
   }
 
   //update net
-  for (x in spliter.netw) {
+  for (x in spliter_task.netw) {
     i = nets.indexOf("NETW" + x);
-    netTime[2*i].append(parseInt(spliter.time*1000), parseFloat(spliter.netw[x].send));
-    netTime[2*i+1].append(parseInt(spliter.time*1000), parseFloat(spliter.netw[x].recv));
+    netTime[2*i].append(parseInt(spliter_task.time*1000), parseFloat(spliter_task.netw[x].send));
+    netTime[2*i+1].append(parseInt(spliter_task.time*1000), parseFloat(spliter_task.netw[x].recv));
   }
 
   //update temperatur
-  for (x in spliter.temp) {
+  for (x in spliter_task.temp) {
     i = temp.indexOf("TEMP" + x);
-    tempTime[i].append(parseInt(spliter.time*1000), parseFloat(spliter.temp[x]));
+    tempTime[i].append(parseInt(spliter_task.time*1000), parseFloat(spliter_task.temp[x]));
   }
 
 };
