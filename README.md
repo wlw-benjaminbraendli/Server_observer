@@ -10,7 +10,7 @@ On the webserver is a possibility to change the observed server whithout to relo
 
 The website uses [smoothie Charts](http://www.smoothiecharts.org). The javascript-file is included in this project, to reduce the amount of downloads.
 
-The website has different charts.
+The website has different charts. You can switch between the following types:
 - CPU usage
 - RAM usage
 - Network
@@ -19,7 +19,7 @@ The website has different charts.
 
 To read the YAML-strings on the client side I use a script from nodeca from the [link](https://github.com/nodeca/js-yaml/blob/master/dist/js-yaml.js).
 
-The data from every disk, NIC and Temperature-Sensor which is found on the Server is transmitted to the website. On the website, you can switch the display of the different graphs.
+The data from every disk, NIC and Temperature-Sensor which is found on the Server is transmitted to the website
 
 The servers don't have to be visable from the computer which opens the website, but it has to visible from the webserver.
 
@@ -40,13 +40,10 @@ This directory has evers file for the website, to display the values send from t
 The server was tested on a instance of lighttpd on a linux system. But it should be portable to other webserver and OS.
 
 ### Observer.html
-This is the html file of the website of the Taskmanager.
-
-### Service.html
-This is the html file of the website of the Servicetable.
+This is the only html file. you can change between the graphs or the table for the running services. The windows can be relocated by drag&drop. Importend to say is, you have to drag the picture. If you drag somthing different, it will behave unintentionally.
 
 ### css/observer.css
-This file gives the website the look. There are only 3 classes, but this site uses not many more.
+This file gives the website the look. There are many different classes. I could have made multiple files and I eventually do this in the future, but in the moment it is, as it is.
 
 ### js/smoothie.js
 This script is from the smoothichart project. It is the original file, so it could be replaced with a different version from their repository, but it it is only tested with the version in this repository.
@@ -54,11 +51,9 @@ This script is from the smoothichart project. It is the original file, so it cou
 ### js/yaml.js
 This script is from the jsyaml project. There are no changes to the file in comparison to the file on the repo in the link above.
 
-### js/server.js
-This file is used to read the list of the servers and to handle changes of the current observed server.
+### js/interface.js
+This file handles the drag&drop of the windows.
 
-### js/task.js
-This script read the data from the server and sent them to the charts.
+### js/container.js
+This file has the class for the windows you can drag&drop. It handles the servercomunication and the switching between table and graph.
 
-## js/service.js
-This script read the data from the server and handles the table of the services.

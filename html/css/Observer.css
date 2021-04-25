@@ -25,7 +25,7 @@ canvas {
 
 .table {
   overflow-y: auto;
-  height: 400px;
+  height: calc(100% - 80px);
 }
 
 .table thead th {
@@ -37,6 +37,7 @@ canvas {
 td {
   padding: 8px 16px;
   border: 1px solid;
+  background-color: black;
   collapse: collapse;
 }
 
@@ -72,4 +73,31 @@ input {
   border: none;
   position: relative;
   top: 10px;
+}
+
+button {
+  position: relative;
+  top: -5px;
+  border: none;
+  color: green;
+  background-color: black;
+}
+
+.problem {
+  position: relative;
+  top: 15px;
+  left: 0px;
+}
+
+html, body {
+  height: 100%;
+}
+
+.container {
+  height: 95%;
+  width: 100%;
+  position: absolute;
+  top: 5%;
+  left: 0;
+  z-index: 0;
 }

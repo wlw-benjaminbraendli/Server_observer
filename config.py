@@ -15,7 +15,7 @@ s.connect(("8.8.8.8", 80))
 ip = s.getsockname()[0]
 s.close()
 
-os.chdir(os.path.dirname(sys.argv[0]))
+#os.chdir(os.path.dirname(sys.argv[0]))
 
 #if automatic read don't function, set the address below
 #ip = "192.168.1.126"
